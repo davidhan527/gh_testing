@@ -19,6 +19,7 @@
 
     <!-- Code syntax highlighting -->
     <link rel="stylesheet" href="lib/css/hybrid.css">
+    <link rel="stylesheet" href="lib/css/styles.css">
 
     <!-- Printing and PDF exports -->
     <script>
@@ -40,16 +41,16 @@
 
       <!-- Any section element inside of this container is displayed as a slide -->
       <div class="slides">
-        <section>
+        <section data-background="lib/images/gh_bg_dark.jpg" data-background-size="100%">
           <h1>Testing at Greenhouse</h1>
         </section>
 
-        <section>
+        <section data-background="lib/images/gh_bg_dark.jpg" data-background-size="100%">
           <h2>Magic Tricks of Testing</h2>
           <iframe width="853" height="480" src="https://www.youtube.com/embed/URSWYvyc42M" frameborder="0" allowfullscreen></iframe>
         </section>
 
-        <section data-markdown>
+        <section data-markdown data-background="lib/images/gh_bg_dark.jpg" data-background-size="100%">
           <script type="text/template">
 
 ### Summary
@@ -59,10 +60,10 @@
           </script>
         </section>
 
-        <section data-markdown style="text-align:left;">
+        <section data-markdown style="text-align:left;" data-background="lib/images/gh_bg_dark.jpg" data-background-size="100%">
           <script type="text/template">
 Mocks - returns nil by default
-```ruby
+```ruby/
   expect(User).to receive(:full_name)
 ```
 
