@@ -71,7 +71,18 @@ Note:
             <p>Slow</p>
             <p>Fragile</p>
             <p>Expensive</p>
+
+          <aside class="notes" data-markdown>
+* Bad tests are expensive, it takes up a lot of developmental time both in writing tests and fixing tests that are constantly breaking.
+* The goal of today's presentation is how can we avoid that all together.
+
+  1. to make tests pleasant to write and
+  2. to make them inexpensive
+
+* When we used to write tests before we implemented these principles, testing was difficult and painful, but once we did start following these principles writing tests became much more efficient and pleasant and now I actually find testing fun. Knowing that I can write tests that are minimul and highly effective gives me a lot of assurance and peace of mind about a feature that I'm introducing. This is immensely valuable.
+          </aside>
         </section>
+
 
         <section data-background="lib/images/gh_bg_light.jpg" data-background-size="100%">
           <h3>Unit Tests: Goals</h3>
@@ -101,15 +112,57 @@ Note:
           </aside>
         </section>
 
-        <section data-background="lib/images/3.png" data-background-size="100%">
-          <p style="margin-top: -34%"> Messages sent to self</p>
-          <!--<img data-src="lib/images/3.png" class="stretch">-->
+        <section data-background="lib/images/gh_bg_light.jpg" data-background-size="100%">
+          <section>
+            <p> Messages sent to self</p>
 
+            <img data-src="lib/images/3.png">
 
-          <aside class="notes" data-markdown>
-* Test incoming command messages by making assertions about direct public side effects
-* Receiver of incoming message has sole responsiblity for asserting the result of direct public side effects
-          </aside>
+            <aside class="notes" data-markdown>
+* Do not test private methods
+* Do not make **assertions** about their result
+* Do not **expect** to send them
+            </aside>
+          </section>
+
+          <section>
+            <p> Messages sent to self</p>
+
+            <img data-src="lib/images/4.png">
+
+            <aside class="notes" data-markdown>
+* this test is redundant. There is no extra test coverage gained here.
+* If the first test passes we know for certain that the type method is working correctly.
+* And if the type method is not working there is no way that the first test will pass.
+
+            </aside>
+          </section>
+
+        </section>
+
+        <section data-background="lib/images/gh_bg_light.jpg" data-background-size="100%">
+          <section>
+            <p> Outing Query Messages </p>
+            <img data-src="lib/images/5.png">
+
+            <aside class="notes" data-markdown>
+            </aside>
+          </section>
+
+          <section>
+            <p> Outing Query Messages </p>
+            <img data-src="lib/images/6.png">
+
+            <aside class="notes" data-markdown>
+* this test is still redundant.
+* by making sure that the private method is called we gain no extra coverage
+* this only binds you the implementation details of the email_with_type method
+* we shouldn't care how the type method works, if it changes it's implementation to an enum the first test will still pass.
+* we should only be testing direct public side effects. The goal is to get the most coverage with the least amount of tests. Tests are expensive
+* with all that said, break the rule if it saves money during development. Sometimes there are private methods that we don't have the time and luxury to refactor and they need to be tested. In those cases you can use your best judgement and just test them if you need to.
+            </aside>
+          </section>
+
         </section>
 
         <section data-markdown style="text-align:left;" data-background="lib/images/gh_bg_light.jpg" data-background-size="100%">
