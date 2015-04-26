@@ -48,6 +48,10 @@
         <section data-background="lib/images/gh_bg_light.jpg" data-background-size="100%">
           <h2>Magic Tricks of Testing</h2>
           <iframe width="853" height="480" src="https://www.youtube.com/embed/URSWYvyc42M" frameborder="0" allowfullscreen></iframe>
+
+          <aside class="notes" data-markdown>
+* 80% of this presentation is shamelessly stolen from points in this video. I spent most of my time here at greenhouse, learning and thinking about how I can take these priniciples and apply them to Greenhouse and that's what I want to share with everyone today
+          </aside>
         </section>
 
         <section data-markdown data-background="lib/images/gh_bg_light.jpg" data-background-size="100%">
@@ -57,11 +61,12 @@
 <br>
 **Testing Interface over Implementation**
 
-* Thorough coverage in the fewest tests possible
+* Maximize coverage with the fewest tests possible
 * Testing everything once
 
 Note:
 * Basic Idea: Testing the interface as in, testing the incoming message and the side effect. Rather than testing the implementation details which are constantly changing.
+* Maximizing coverage with the fewest tests possible
           </script>
 
         </section>
@@ -73,7 +78,11 @@ Note:
             <p>Expensive</p>
 
           <aside class="notes" data-markdown>
+* When I first came to greenhouse, I did not like testing. I saw them on one hand as something very valuable also a necessary evil. But after learning these priniciples and getting accustomed to practicing them I can honestly say that I enjoy testing and actual find writing tests to be fun. Most people hate writing tests, why?
 * Bad tests are expensive, it takes up a lot of developmental time both in writing tests and fixing tests that are constantly breaking.
+* I don't think anyone would say that there isn't value in tests. Everyone knows theirs value to them, it's just that it's too time consuming and painful to write and fix them.
+* It's possible that, through minimal time investment we can create immense value through our tests. If I am able to effectively and efficiently have thorough coverage in the smallest amount of tests possible, then that's great! If I can do that writing tests can actually be enjoyable rather than painful.
+
 * The goal of today's presentation is how can we avoid that all together.
 
   1. to make tests pleasant to write and
@@ -138,11 +147,19 @@ Note:
             </aside>
           </section>
 
+          <section>
+            <p> Messages sent to self</p>
+
+            <img data-src="lib/images/5.png">
+
+            <aside class="notes" data-markdown>
+            </aside>
+          </section>
         </section>
 
         <section data-background="lib/images/gh_bg_light.jpg" data-background-size="100%">
           <section>
-            <p> Outing Query Messages </p>
+            <p> Outgoing Query Messages </p>
             <img data-src="lib/images/5.png">
 
             <aside class="notes" data-markdown>
@@ -150,19 +167,49 @@ Note:
           </section>
 
           <section>
-            <p> Outing Query Messages </p>
+            <p> Outgoing Query Messages </p>
             <img data-src="lib/images/6.png">
 
             <aside class="notes" data-markdown>
 * this test is still redundant.
-* by making sure that the private method is called we gain no extra coverage
+* Over specification. Adds cost with no benefits
 * this only binds you the implementation details of the email_with_type method
 * we shouldn't care how the type method works, if it changes it's implementation to an enum the first test will still pass.
+* If a message has no visible public side effects, the sender should not test it. That's the job of the receiving class
 * we should only be testing direct public side effects. The goal is to get the most coverage with the least amount of tests. Tests are expensive
 * with all that said, break the rule if it saves money during development. Sometimes there are private methods that we don't have the time and luxury to refactor and they need to be tested. In those cases you can use your best judgement and just test them if you need to.
             </aside>
           </section>
 
+        </section>
+
+        <section>
+          <section data-background="lib/images/7.png" data-background-size="100%">
+            <div style="margin-top: -34%;">
+              <p> Outgoing Command Messages </p>
+            </div>
+
+            <div>
+              <p class="fragment" style="position: absolute; bottom: -923%; right: 0%;"> - Is this Departments responsibilty? </p>
+            </div>
+            <aside class="notes" data-markdown>
+* this is an integration test if we test objects outside of this class
+            </aside>
+          </section>
+
+          <section data-background="lib/images/7_1.png" data-background-size="100%">
+            <p style="margin-top: -34%;"> Outgoing Command Messages </p>
+            <aside class="notes" data-markdown>
+
+            </aside>
+          </section>
+
+          <section data-background="lib/images/7_2.png" data-background-size="100%">
+            <p style="margin-top: -34%;"> Outgoing Command Messages </p>
+            <aside class="notes" data-markdown>
+* Department IS responsible for seiding create_entry to the receiver
+            </aside>
+          </section>
         </section>
 
         <section data-markdown style="text-align:left;" data-background="lib/images/gh_bg_light.jpg" data-background-size="100%">
