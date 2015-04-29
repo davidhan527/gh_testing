@@ -12,11 +12,30 @@ class Department
 end
 
 it "updates name and create a changelog entry" do
-  expect(ChangeLog).to receive(:create_entry).
-    with(department, "Web Developent", "Engineering")
+  department = create(:department)
+
+  expect { department.update_name("Engineering") }.
+    to change { department.name }.
+      from("Web Development").
+      to("Engineering")
+
+  # make an assertion about the db for ChangeLog?
+
 end
 
 
+it "updates name and create a changelog entry" do
+  department = create(:department)
+
+  # This message MUST get sent
+  expect(ChangeLog).to receive(:create_entry).
+    with(department, "Web Developent", "Engineering")
+
+  expect { department.update_name("Engineering") }.
+    to change { department.name }.
+      from("Web Development").
+      to("Engineering")
+end
 
 
 

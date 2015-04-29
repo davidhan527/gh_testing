@@ -62,6 +62,7 @@
 **Testing Interface over Implementation**
 
 * Maximize coverage with the fewest tests possible
+* Testing the interface and not the implementation
 * Testing everything once
 
 Note:
@@ -99,15 +100,17 @@ Note:
             <p><strong>Stable</strong></p>
             <p><strong>Fast</strong></p>
             <p><strong>Few</strong></p>
-        </section>
+      </section>
 
-        <section data-background="lib/images/unit_testing_minimalist.png" data-background-size="100%">
-        </section>
+      <section data-background="lib/images/unit_testing_minimalist.png" data-background-size="100%">
+      </section>
 
-        <section data-background="lib/images/gh_bg_light.jpg" data-background-size="100%">
-          <p> 1. Test Incoming Query Messages </p>
-          <img data-src="lib/images/1.png">
-          <aside class="notes">Test incoming query messages by making assertions about what they send back</aside>
+      <section data-background="lib/images/gh_bg_light.jpg" data-background-size="100%">
+        <p> 1. Test Incoming Query Messages </p>
+        <img data-src="lib/images/1.png">
+        <aside class="notes" data-markdown>
+* Test incoming query messages by making assertions about what they send back
+        </aside>
         </section>
 
         <section data-background="lib/images/gh_bg_light.jpg" data-background-size="100%">
@@ -143,7 +146,6 @@ Note:
 * this test is redundant. There is no extra test coverage gained here.
 * If the first test passes we know for certain that the type method is working correctly.
 * And if the type method is not working there is no way that the first test will pass.
-
             </aside>
           </section>
         </section>
@@ -161,44 +163,98 @@ Note:
             <p> Outgoing Query Messages </p>
             <img data-src="lib/images/6.png">
 
+            <ul>
+              <li class="fragment" style="font-size: 70%; text-align: left"> Over Specification - Adds cost with no benefits </li>
+              <li class="fragment" style="font-size: 70%; text-align: left"> Binds you to the implementation details of the hiring_manager_name method </li>
+              <li class="fragment" style="font-size: 70%; text-align: left"> If a message has no visible public side effects, the sender should not test it. That's the responsibility of the receiving class </li>
+            </ul>
             <aside class="notes" data-markdown>
 * this test is still redundant.
 * Over specification. Adds cost with no benefits
-* this only binds you the implementation details of the email_with_type method
-* we shouldn't care how the type method works, if it changes it's implementation to an enum the first test will still pass.
+* this only binds you the implementation details of the hiring_manager_name method
+* we shouldn't care how the full_name method works, if it changes it's implementation the first test will still pass.
 * If a message has no visible public side effects, the sender should not test it. That's the job of the receiving class
-* we should only be testing direct public side effects. The goal is to get the most coverage with the least amount of tests. Tests are expensive
-* with all that said, break the rule if it saves money during development. Sometimes there are private methods that we don't have the time and luxury to refactor and they need to be tested. In those cases you can use your best judgement and just test them if you need to.
+* We've been unit testing some things well, but I don't think we're doing this well yet. We should be more mindful of having too many assertions on message sending.
+* we should only be testing direct public side effects. The goal is to get the most coverage with the least amount of tests. We don't want tests to be expensive.
+* with all that said, break the rule if it saves money during development. Sometimes there are private methods that we don't have the time and luxury to refactor and they need to be tested. In those cases you can use your best judgement and test them if you need to.
             </aside>
           </section>
 
         </section>
 
-        <section>
-          <section data-background="lib/images/7.png" data-background-size="100%">
-            <div style="margin-top: -34%;">
-              <p> Outgoing Command Messages </p>
-            </div>
+        <section data-background="lib/images/gh_bg_light.jpg" data-background-size="100%">
+          <section>
+            <p> Outgoing Command Messages </p>
+            <pre><code class="ruby" data-trim>
+class Department
+  # ...
+  def update_name(new_name)
+    old_name = name
+    self.name = new_name
+    self.save!
 
-            <div>
-              <p class="fragment" style="position: absolute; bottom: -923%; right: 0%;"> - Is this Departments responsibilty? </p>
-            </div>
+    ChangeLog.create_entry(self, old_name, new_name)
+  end
+end
+            </code></pre>
+            <pre><code class="ruby" data-trim>
+it "updates name and create a changelog entry" do
+  department = create(:department)
+
+  expect { department.update_name("Engineering") }.
+    to change { department.name }.
+      from("Web Development").
+      to("Engineering")
+
+  # make an assertion about the db for ChangeLog?
+end
+            </code></pre>
+
+              <p class="fragment" style="text-align: left"> - Is this Departments responsibility? </p>
             <aside class="notes" data-markdown>
 * this is an integration test if we test objects outside of this class
+* it is ChangeLog's responsibility to test this method
             </aside>
           </section>
 
-          <section data-background="lib/images/7_1.png" data-background-size="100%">
-            <p style="margin-top: -34%;"> Outgoing Command Messages </p>
-            <aside class="notes" data-markdown>
+          <section>
+            <p> Outgoing Command Messages </p>
+            <pre><code class="ruby" data-trim>
+class Department
+  # ...
+  def update_name(new_name)
+    old_name = name
+    self.name = new_name
+    self.save!
 
-            </aside>
-          </section>
+    ChangeLog.create_entry(self, old_name, new_name)
+  end
+end
+            </code></pre>
+            <pre><code class="ruby" data-trim>
+it "updates name and create a changelog entry" do
+  department = create(:department)
 
-          <section data-background="lib/images/7_2.png" data-background-size="100%">
-            <p style="margin-top: -34%;"> Outgoing Command Messages </p>
+  # this message MUST get sent
+  expect(ChangeLog).to receive(:create_entry).
+    with(department, "Web Developent", "Engineering")
+
+  expect { department.update_name("Engineering") }.
+    to change { department.name }.
+      from("Web Development").
+      to("Engineering")
+end
+            </code></pre>
+
+            <ul>
+              <li class="fragment" style="font-size: 50%; text-align:left;"> Department IS responsible for sending create_entry to the receiver </li>
+              <li class="fragment" style="font-size: 50%; text-align:left;"> The public api DEPENDS on the create_entry message being sent </li>
+              <li class="fragment" style="font-size: 50%; text-align:left;"> Expect to send outgoing command messages </li>
+            </ul>
+
             <aside class="notes" data-markdown>
-* Department IS responsible for seiding create_entry to the receiver
+* Department IS responsible for sending create_entry to the receiver
+* The public api DEPENDS on the create_entry message being sent
 * Expect to send outgoing command messages
 * Break rule if side effects are stable and cheap
             </aside>
