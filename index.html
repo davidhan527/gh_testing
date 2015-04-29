@@ -146,15 +146,6 @@ Note:
 
             </aside>
           </section>
-
-          <section>
-            <p> Messages sent to self</p>
-
-            <img data-src="lib/images/5.png">
-
-            <aside class="notes" data-markdown>
-            </aside>
-          </section>
         </section>
 
         <section data-background="lib/images/gh_bg_light.jpg" data-background-size="100%">
@@ -262,7 +253,8 @@ class Department
     ChangeLog.create_entry(self, old_name, new_name)
   end
 end
-
+            </code></pre>
+            <pre><code class="ruby" data-trim>
 # department_spec.rb
 it "updates name and create a changelog entry" do
   expect(ChangeLog).to receive(:create_entry).
@@ -284,7 +276,7 @@ end
 
           <section>
             <p> Mocking External Dependencies </p>
-            <pre><code class="ruby" style="max-height: 600px" data-trim>
+            <pre><code class="ruby" data-trim>
 class UserEmailer
   def initialize(user)
     @user = user
@@ -295,6 +287,11 @@ class UserEmailer
   end
 end
 
+            </code></pre>
+            <pre><code class="ruby" data-trim>
+
+### Factory Girl
+
 it "sends email to user" do
   user = create(:user)
   user_emailer = UserEmailer.new(user)
@@ -303,6 +300,8 @@ it "sends email to user" do
     "serge.backflip@example.com"
   )
 end
+
+### Test Double
 
 it "sends email to user" do
   # by mocking external dependencies you can make the tests faster.
@@ -317,13 +316,57 @@ it "sends email to user" do
     "serge.backflip@example.com"
   )
 end
+
+### Instance Double
+
+it "sends email to user" do
+  user = instance_double("User")
+  expect(user).to receive(:email).and_return("serge.backflip@example.com")
+  user_emailer = UserEmailer.new(user)
+
+  expect(user_emailer.send_email_to(user.email)).to deliver_to(
+    "serge.backflip@example.com"
+  )
+end
+
+# if spec fails
+# output: "User does not implement: email"
+
             </code></pre>
-            <p class="fragment"></p>
-            <p class="fragment"></p>
+            <p class="fragment" style="font-size: 70%"> Protects against api changes </p>
+            <p class="fragment" style="font-size: 70%"> class_double works the same way for class methods </p>
             <aside class="notes" data-markdown>
             </aside>
           </section>
 
+          <section>
+            <p> Mocking external dependencies with Distant Side Effects </p>
+            <pre><code class="ruby" data-trim>
+class ApplicationController
+  def accept
+    # ...
+
+    application.hire(application_details)
+  end
+end
+            </code></pre>
+            <pre><code class="ruby" data-trim>
+
+it "accepts application" do
+  # ...
+
+  allow(application).to receive(:hire).and_call_original
+end
+            </code></pre>
+            <p class="fragment" style="font-size: 70%"> Protects against distant side effects that may error out </p>
+            <aside class="notes" data-markdown>
+* Sometimes you have a method with distant side effects which also requires a lot of setup.
+* An object that calls a method on another object which in turn calls on a method on another object.
+* Mocking a method like that does not provide assurance that the code will be working.
+* Although this individual method may be well tested in the application class, how can I be sure that this method will work in this specific setup in this specific circumstance of the controller? I don't.
+* To get around this, .and_call_original allows us to assert that a method will be sent and then actually call the method so that we can make sure that the string of methods that are called through the .hire method does not error out. This provides some extra assurance and provides greater coverage.
+            </aside>
+          </section>
         </section>
 
         <!-- Example of nested vertical slides -->

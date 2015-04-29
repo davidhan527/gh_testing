@@ -19,4 +19,14 @@ describe "#hiring_managers_name" do
 end
 
 
+class ApplicationController
+  def accept
+    # ...
 
+    application.hire(application_details)
+  end
+end
+
+it "accepts application" do
+  allow(application).to receive(:hire).and_call_original
+end
