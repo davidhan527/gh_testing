@@ -208,29 +208,122 @@ Note:
             <p style="margin-top: -34%;"> Outgoing Command Messages </p>
             <aside class="notes" data-markdown>
 * Department IS responsible for seiding create_entry to the receiver
+* Expect to send outgoing command messages
+* Break rule if side effects are stable and cheap
             </aside>
           </section>
         </section>
 
-        <section data-markdown style="text-align:left;" data-background="lib/images/gh_bg_light.jpg" data-background-size="100%">
-          <script type="text/template">
-Mocks - returns nil by default
-```ruby/
-  expect(User).to receive(:full_name)
-```
+        <section data-background="lib/images/gh_bg_light.jpg" data-background-size="100%">
 
-<br>
-Stubs
-```ruby
-  allow(User).to receive(:full_name).and_return('first last')
-```
+          <section>
+            <h2> Can we Mock reliably? </h2>
+            <aside class="notes" data-markdown>
+* A lot of times mocking and stubbing makes people nervous, because they question if there is a lot of mocking all over the test suite, are we really testing anything? Are the tests reliable?
+            </aside>
+          </section>
 
-<br>
-Mock and Stub
-```ruby
-  expect(User).to receive(:full_name).and_return('first last')
-```
-          </script>
+          <section style="text-align:left;">
+            <p style="font-size: 80%">Mocks - assertion that a message is received.</p>
+            <p style="font-size: 80%">&nbsp;&nbsp;&nbsp;=> Returns nil by default</p>
+
+            <pre><code class="ruby" data-trim>
+              expect(User).to receive(:full_name)
+            </code></pre>
+
+            <br>
+            <p style="font-size: 80%">Stub - When this message is received</p>
+            <p style="font-size: 80%">&nbsp;&nbsp;&nbsp;=> provides a specific return.</p>
+
+            <pre><code class="ruby" data-trim>
+              allow(User).to receive(:full_name).and_return('first last')
+            </code></pre>
+            <br>
+            <p style="font-size: 80%">Mock and Stub - Assertion that a message is received</p>
+            <p style="font-size: 80%">&nbsp;&nbsp;&nbsp;=> provides a specific return.</p>
+
+            <pre><code class="ruby" data-trim>
+              expect(User).to receive(:full_name).and_return('first last')
+            </code></pre>
+          </section>
+
+          <section>
+            <p> Partial Doubles & verifying partial doubles </p>
+            <pre><code class="ruby" data-trim>
+
+class Department
+  # ...
+
+  def update_name(new_name)
+    old_name = name
+    self.name = new_name
+    self.save!
+
+    ChangeLog.create_entry(self, old_name, new_name)
+  end
+end
+
+# department_spec.rb
+it "updates name and create a changelog entry" do
+  expect(ChangeLog).to receive(:create_entry).
+    with(department, "Web Developent", "Engineering")
+end
+
+# spec_helper.rb
+RSpec.configure do |config|
+  config.mock_with :rspec do |mocks|
+    mocks.verify_partial_doubles = true
+  end
+end
+            </code></pre>
+            <p class="fragment"> - Protects against api changes </p>
+            <p class="fragment"> - Protects against typos </p>
+            <aside class="notes" data-markdown>
+            </aside>
+          </section>
+
+          <section>
+            <p> Mocking External Dependencies </p>
+            <pre><code class="ruby" style="max-height: 600px" data-trim>
+class UserEmailer
+  def initialize(user)
+    @user = user
+  end
+
+  def email
+    send_email_to(user.email)
+  end
+end
+
+it "sends email to user" do
+  user = create(:user)
+  user_emailer = UserEmailer.new(user)
+
+  expect(user_emailer.send_email_to(user.email)).to deliver_to(
+    "serge.backflip@example.com"
+  )
+end
+
+it "sends email to user" do
+  # by mocking external dependencies you can make the tests faster.
+  # testing user, is not the responsiblity of UserEmailer.
+  # all we need is an object that responds to email
+
+  user = double("user")
+  expect(user).to receive(:email).and_return("serge.backflip@example.com")
+  user_emailer = UserEmailer.new(user)
+
+  expect(user_emailer.send_email_to(user.email)).to deliver_to(
+    "serge.backflip@example.com"
+  )
+end
+            </code></pre>
+            <p class="fragment"></p>
+            <p class="fragment"></p>
+            <aside class="notes" data-markdown>
+            </aside>
+          </section>
+
         </section>
 
         <!-- Example of nested vertical slides -->
