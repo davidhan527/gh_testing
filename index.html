@@ -108,6 +108,7 @@ Note:
       <section data-background="lib/images/gh_bg_light.jpg" data-background-size="100%">
         <p> 1. Test Incoming Query Messages </p>
         <img data-src="lib/images/1.png">
+        <p class="fragment"> Test incoming query messages by making assertions about what they send back </p>
         <aside class="notes" data-markdown>
 * Test incoming query messages by making assertions about what they send back
         </aside>
@@ -116,11 +117,13 @@ Note:
         <section data-background="lib/images/gh_bg_light.jpg" data-background-size="100%">
           <p> 2. Incoming Command Messages </p>
           <img data-src="lib/images/2.png">
+          <p class="fragment"> Test incoming command messages by making assertions about direct public side effects </p>
+          <p class="fragment"> Receiver has sole responsiblity for asserting the result of direct public side effects </p>
 
 
           <aside class="notes" data-markdown>
 * Test incoming command messages by making assertions about direct public side effects
-* Receiver of incoming message has sole responsiblity for asserting the result of direct public side effects
+* Receiver has sole responsiblity for asserting the result of direct public side effects
           </aside>
         </section>
 
@@ -179,7 +182,6 @@ Note:
 * with all that said, break the rule if it saves money during development. Sometimes there are private methods that we don't have the time and luxury to refactor and they need to be tested. In those cases you can use your best judgement and test them if you need to.
             </aside>
           </section>
-
         </section>
 
         <section data-background="lib/images/gh_bg_light.jpg" data-background-size="100%">
@@ -313,6 +315,7 @@ end
             <pre><code class="ruby" data-trim>
 # department_spec.rb
 it "updates name and create a changelog entry" do
+  department = create(:department)
   expect(ChangeLog).to receive(:create_entry).
     with(department, "Web Developent", "Engineering")
 end
@@ -435,9 +438,6 @@ end
             <li> Making selenium/feature specs readable, reliable, and performant </li>
           </ul>
         </section>
-
-
-
       </div>
 
     </div>
