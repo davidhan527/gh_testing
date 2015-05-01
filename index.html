@@ -15,7 +15,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
 
     <link rel="stylesheet" href="css/reveal.css">
-    <link rel="stylesheet" href="css/theme/white.css" id="theme">
+    <link rel="stylesheet" href="css/theme/sky.css" id="theme">
 
     <!-- Code syntax highlighting -->
     <link rel="stylesheet" href="lib/css/hybrid.css">
@@ -54,22 +54,21 @@
           </aside>
         </section>
 
-        <section data-markdown data-background="lib/images/gh_bg_light.jpg" data-background-size="100%">
-          <script type="text/template">
+        <section data-background="lib/images/gh_bg_light.jpg" data-background-size="100%" style="text-align:left">
 
-### Summary
-<br>
-**Testing Interface over Implementation**
+          <h3 style="text-align:center"> Objectives </h3>
+          <br>
+          <h4 style="text-decoration: underline"> part 1</h4>
+          <p> - Maximizing coverage with the fewest tests possible </p>
+          <p> - Testing everything once </p>
+          <p> - Testing the interface and not the implementation </p>
+          <h4 style="text-decoration: underline"> part 2</h4>
+          <p> - How to mock reliably</p>
 
-* Maximize coverage with the fewest tests possible
-* Testing the interface and not the implementation
-* Testing everything once
-
-Note:
+          <aside class="notes" data-markdown>
 * Basic Idea: Testing the interface as in, testing the incoming message and the side effect. Rather than testing the implementation details which are constantly changing.
 * Maximizing coverage with the fewest tests possible
-          </script>
-
+          </aside>
         </section>
 
         <section data-background="lib/images/gh_bg_light.jpg" data-background-size="100%">
@@ -106,7 +105,7 @@ Note:
       </section>
 
       <section data-background="lib/images/gh_bg_light.jpg" data-background-size="100%">
-        <p> 1. Test Incoming Query Messages </p>
+        <p> Test Incoming Query Messages </p>
         <img data-src="lib/images/1.png">
         <p class="fragment"> Test incoming query messages by making assertions about what they send back </p>
         <aside class="notes" data-markdown>
@@ -115,10 +114,10 @@ Note:
         </section>
 
         <section data-background="lib/images/gh_bg_light.jpg" data-background-size="100%">
-          <p> 2. Incoming Command Messages </p>
-          <img data-src="lib/images/2.png">
-          <p class="fragment"> Test incoming command messages by making assertions about direct public side effects </p>
-          <p class="fragment"> Receiver has sole responsiblity for asserting the result of direct public side effects </p>
+          <p> Incoming Command Messages </p>
+          <img data-src="lib/images/2.png" style="width:80%">
+          <p class="fragment" style="font-size:60%"> Test incoming command messages by making assertions about direct public side effects </p>
+          <p class="fragment" style="font-size:60%"> Receiver has sole responsiblity for asserting the result of direct public side effects </p>
 
 
           <aside class="notes" data-markdown>
@@ -136,7 +135,6 @@ Note:
             <aside class="notes" data-markdown>
 * Do not test private methods
 * Do not make **assertions** about their result
-* Do not **expect** to send them
             </aside>
           </section>
 
@@ -264,9 +262,8 @@ end
         </section>
 
         <section data-background="lib/images/gh_bg_light.jpg" data-background-size="100%">
-
           <section>
-            <h2> Can we Mock reliably? </h2>
+            <h2> Can we Mock reliably ? </h2>
             <aside class="notes" data-markdown>
 * A lot of times mocking and stubbing makes people nervous, because they question if there is a lot of mocking all over the test suite, are we really testing anything? Are the tests reliable?
             </aside>
@@ -429,15 +426,27 @@ end
           </section>
         </section>
 
-        <section data-background="lib/images/gh_bg_light.jpg" data-background-size="100%">
-          <h3> To Be Continued..? </h3>
+        <section data-background="lib/images/gh_bg_light.jpg" data-background-size="100%" style="text-align:left">
+          <h2 style="text-align:center"> Summary </h2>
+          <br>
+          <p> - Test everything once </p>
+          <p> - Test the public interface and not the implementation </p>
+          <p> - Prefer test doubles over factory girl or actual objects </p>
+          <p> - Prefer instance_double and class_double over doubles</p>
+          <p> - Understand these "rules" but use your best judgement for more complex test cases </p>
 
-          <ul>
-            <li> Controllers and dependency management </li>
-            <li> Understanding waiting behavior to avoid finicky capybara specs </li>
-            <li> Making selenium/feature specs readable, reliable, and performant </li>
-          </ul>
+          <aside class="notes" data-markdown>
+          </aside>
         </section>
+
+        <section data-background="lib/images/gh_bg_light.jpg" data-background-size="100%" style="text-align:left">
+          <h3 style="text-align:center"> To Be Continued..? </h3>
+          <br>
+          <p> - Controllers and dependency management </p>
+          <p> - Understanding waiting behavior to avoid finicky capybara specs </p>
+          <p> - Making selenium/feature specs readable, reliable, and performant </p>
+        </section>
+
       </div>
 
     </div>
