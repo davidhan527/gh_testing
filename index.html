@@ -243,7 +243,6 @@ end
             <p> Outgoing Command Messages </p>
             <pre><code class="ruby" data-trim>
 class Department
-  # ...
   def update_name(new_name)
     old_name = name
     self.name = new_name
@@ -268,11 +267,9 @@ it "updates name and create a changelog entry" do
 end
             </code></pre>
 
-            <ul>
-              <li class="fragment" style="font-size: 50%; text-align:left;"> Department IS responsible for sending create_entry to the receiver </li>
-              <li class="fragment" style="font-size: 50%; text-align:left;"> The public api DEPENDS on the create_entry message being sent </li>
-              <li class="fragment" style="font-size: 50%; text-align:left;"> Expect to send outgoing command messages </li>
-            </ul>
+            <p class="fragment" style="font-size: 50%; text-align:left; line-height:0.3em"> - Department IS responsible for sending create_entry to the receiver </p>
+            <p class="fragment" style="font-size: 50%; text-align:left; line-height:0.3em"> - The public api DEPENDS on the create_entry message being sent </p>
+            <p class="fragment" style="font-size: 50%; text-align:left; line-height:0.3em"> - Expect to send outgoing command messages </p>
 
             <aside class="notes" data-markdown>
 * Department IS responsible for sending create_entry to the receiver
