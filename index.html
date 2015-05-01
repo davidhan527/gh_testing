@@ -153,6 +153,32 @@
         <section data-background="lib/images/gh_bg_light.jpg" data-background-size="100%">
           <section>
             <p> Outgoing Query Messages </p>
+            <pre><code class="ruby" data-trim>
+class Application
+  # ...
+
+  def hiring_managers_name
+    "Hiring Manager : " + hiring_manager.full_name
+  end
+end
+
+describe "#hiring_managers_name" do
+  it "returns hiring_managers full name" do
+    application = create(:application)
+
+    expect(
+      application.hiring_managers_name
+    ).to eq "Hiring Manager : Serge Backflip"
+  end
+end
+            </code></pre>
+
+            <aside class="notes" data-markdown>
+            </aside>
+          </section>
+
+          <section>
+            <p> Outgoing Query Messages </p>
             <img data-src="lib/images/5.png" style="width:80%">
 
             <aside class="notes" data-markdown>
