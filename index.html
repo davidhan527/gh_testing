@@ -6,8 +6,8 @@
 
     <title>Testing at Greenhouse</title>
 
-    <meta name="description" content="A framework for easily creating beautiful presentations using HTML">
-    <meta name="author" content="Hakim El Hattab">
+    <meta name="description" content="Testing at Greenhouse">
+    <meta name="author" content="David Han">
 
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -318,6 +318,7 @@ it "updates name and create a changelog entry" do
   department = create(:department)
   expect(ChangeLog).to receive(:create_entry).
     with(department, "Web Developent", "Engineering")
+  # ...
 end
 
 # spec_helper.rb
@@ -348,14 +349,13 @@ end
 
             </code></pre>
             <pre><code class="ruby" data-trim>
-
 ### Factory Girl
 
 it "sends email to user" do
   user = create(:user, :email => "serge.backflip@example.com" )
   user_emailer = UserEmailer.new(user)
 
-  expect(user_emailer.send_email_to(user.email)).to deliver_to(
+  expect(user_emailer.email(user.email)).to deliver_to(
     "serge.backflip@example.com"
   )
 end
@@ -364,15 +364,15 @@ end
 
 it "sends email to user" do
   # mocking external dependencies makes the test faster.
-  # testing user, is not the responsiblity of UserEmailer.
+  # testing user, is *not* the responsiblity of UserEmailer.
   # all we need is an object that responds to email
 
   user = double("user")
-  expect(user).to receive(:email).
+  allow(user).to receive(:email).
     and_return("serge.backflip@example.com")
   user_emailer = UserEmailer.new(user)
 
-  expect(user_emailer.send_email_to(user.email)).to deliver_to(
+  expect(user_emailer.email(user.email)).to deliver_to(
     "serge.backflip@example.com"
   )
 end
@@ -381,10 +381,10 @@ end
 
 it "sends email to user" do
   user = instance_double("User")
-  expect(user).to receive(:email).and_return("serge.backflip@example.com")
+  allow(user).to receive(:email).and_return("serge.backflip@example.com")
   user_emailer = UserEmailer.new(user)
 
-  expect(user_emailer.send_email_to(user.email)).to deliver_to(
+  expect(user_emailer.email(user.email)).to deliver_to(
     "serge.backflip@example.com"
   )
 end

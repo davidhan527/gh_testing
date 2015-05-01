@@ -23,9 +23,6 @@ describe "#email_with_type" do
   end
 end
 
-
-
-
 describe "#type" do
   it "finds the type of the email" do
     email = Email.new(:email => "test@example.com")
