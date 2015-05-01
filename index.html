@@ -19,7 +19,6 @@
 
     <!-- Code syntax highlighting -->
     <link rel="stylesheet" href="lib/css/hybrid.css">
-    <link rel="stylesheet" href="lib/css/styles.css">
 
     <!-- Printing and PDF exports -->
     <script>
@@ -95,10 +94,10 @@
 
         <section data-background="lib/images/gh_bg_light.jpg" data-background-size="100%">
           <h3>Unit Tests: Goals</h3>
-            <p><strong>Thorough</strong></p>
-            <p><strong>Stable</strong></p>
-            <p><strong>Fast</strong></p>
-            <p><strong>Few</strong></p>
+            <p>Thorough</p>
+            <p>Stable</p>
+            <p>Fast</p>
+            <p>Few</p>
       </section>
 
       <section data-background="lib/images/unit_testing_minimalist.png" data-background-size="100%">
@@ -154,7 +153,7 @@
         <section data-background="lib/images/gh_bg_light.jpg" data-background-size="100%">
           <section>
             <p> Outgoing Query Messages </p>
-            <img data-src="lib/images/5.png">
+            <img data-src="lib/images/5.png" style="width:80%">
 
             <aside class="notes" data-markdown>
             </aside>
@@ -162,13 +161,10 @@
 
           <section>
             <p> Outgoing Query Messages </p>
-            <img data-src="lib/images/6.png">
-
-            <ul>
-              <li class="fragment" style="font-size: 70%; text-align: left"> Over Specification - Adds cost with no benefits </li>
-              <li class="fragment" style="font-size: 70%; text-align: left"> Binds you to the implementation details of the hiring_manager_name method </li>
-              <li class="fragment" style="font-size: 70%; text-align: left"> If a message has no visible public side effects, the sender should not test it. That's the responsibility of the receiving class </li>
-            </ul>
+            <img data-src="lib/images/6.png" style="width: 80%">
+            <p class="fragment" style="font-size: 70%; text-align: left"> - Over Specification - Adds cost with no benefits </p>
+            <p class="fragment" style="font-size: 70%; text-align: left"> - Binds you to the implementation details of the hiring_manager_name method </p>
+            <p class="fragment" style="font-size: 70%; text-align: left"> - If a message has no visible public side effects, the sender should not test it. That's the responsibility of the receiving class </p>
             <aside class="notes" data-markdown>
 * this test is still redundant.
 * Over specification. Adds cost with no benefits
@@ -388,6 +384,8 @@ end
 
 # if spec fails
 # output: "User does not implement: email"
+
+&nbsp;
 
             </code></pre>
             <p class="fragment" style="font-size: 70%"> Protects against api changes </p>
