@@ -332,7 +332,7 @@ end
 # department_spec.rb
 it "updates name and create a changelog entry" do
   department = create(:department)
-  expect(ChangeLog).to receive(:create_entry).
+  allow(ChangeLog).to receive(:create_entry).
     with(department, "Web Developent", "Engineering")
   # ...
 end
@@ -433,7 +433,7 @@ end
 it "accepts application" do
   # ...
 
-  allow(application).to receive(:hire).and_call_original
+  expect(application).to receive(:hire).and_call_original
 end
             </code></pre>
             <p class="fragment" style="font-size: 70%"> Protects against distant side effects that may error out </p>
