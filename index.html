@@ -155,41 +155,51 @@
             <p> Outgoing Query Messages </p>
             <pre><code class="ruby" data-trim>
 class Application
-  # ...
+  def initialize(candidate)
+    @candidate = candidate
+  end
 
-  def hiring_managers_name
-    "Hiring Manager : " + hiring_manager.full_name
+  def candidate_name
+    "Hiring Manager : " + @candidate.full_name
   end
 end
 
-describe "#hiring_managers_name" do
-  it "returns hiring_managers full name" do
+describe "#candidate_name" do
+  it "returns candidates full name" do
     application = create(:application)
 
-    expect(
-      application.hiring_managers_name
-    ).to eq "Hiring Manager : Serge Backflip"
+    expect(application.candidate_name).
+      to eq "Hiring Manager : Serge Backflip"
+  end
+end
+
+describe "#candidate_name" do
+  it "returns candidates full name" do
+    application = create(:application)
+
+    expect(application.candidate_name).
+      to eq "Hiring Manager : Serge Backflip"
+    # REDUNDANT
+    expect(application.candidate_name.full_name).
+      to eq "Serge Backflip"
+  end
+end
+
+describe "#candidate_name" do
+  it "returns candidates full name" do
+    application = create(:application)
+
+    # STILL REDUNDANT
+    expect(application.canddiate_name).to receive(:full_name)
+
+    expect(application.candidate_name).
+      to eq "Hiring Manager : Serge Backflip"
   end
 end
             </code></pre>
 
-            <aside class="notes" data-markdown>
-            </aside>
-          </section>
-
-          <section>
-            <p> Outgoing Query Messages </p>
-            <img data-src="lib/images/5.png" style="width:80%">
-
-            <aside class="notes" data-markdown>
-            </aside>
-          </section>
-
-          <section>
-            <p> Outgoing Query Messages </p>
-            <img data-src="lib/images/6.png" style="width: 80%">
             <p class="fragment" style="font-size: 70%; text-align: left"> - Over Specification - Adds cost with no benefits </p>
-            <p class="fragment" style="font-size: 70%; text-align: left"> - Binds you to the implementation details of the hiring_manager_name method </p>
+            <p class="fragment" style="font-size: 70%; text-align: left"> - Binds you to the implementation details of the full_name method </p>
             <p class="fragment" style="font-size: 70%; text-align: left"> - If a message has no visible public side effects, the sender should not test it. That's the responsibility of the receiving class </p>
             <aside class="notes" data-markdown>
 * this test is still redundant.
@@ -201,6 +211,7 @@ end
 * we should only be testing direct public side effects. The goal is to get the most coverage with the least amount of tests. We don't want tests to be expensive.
 * with all that said, break the rule if it saves money during development. Sometimes there are private methods that we don't have the time and luxury to refactor and they need to be tested. In those cases you can use your best judgement and test them if you need to.
             </aside>
+
           </section>
         </section>
 
