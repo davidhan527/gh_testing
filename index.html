@@ -220,7 +220,6 @@ end
             <p> Outgoing Command Messages </p>
             <pre><code class="ruby" data-trim>
 class Department
-  # ...
   def update_name(new_name)
     old_name = name
     self.name = new_name
@@ -328,8 +327,6 @@ end
             <pre><code class="ruby" data-trim>
 
 class Department
-  # ...
-
   def update_name(new_name)
     old_name = name
     self.name = new_name
@@ -345,7 +342,6 @@ it "updates name and create a changelog entry" do
   department = create(:department)
   allow(ChangeLog).to receive(:create_entry).
     with(department, "Web Developent", "Engineering")
-  # ...
 end
 
 # spec_helper.rb
@@ -390,10 +386,6 @@ end
 ### Test Double
 
 it "sends email to user" do
-  # mocking external dependencies makes the test faster.
-  # testing user, is *not* the responsiblity of UserEmailer.
-  # all we need is an object that responds to email
-
   user = double("user")
   allow(user).to receive(:email).
     and_return("serge.backflip@example.com")
@@ -403,6 +395,10 @@ it "sends email to user" do
     "serge.backflip@example.com"
   )
 end
+# mocking external dependencies makes the test faster.
+# testing user, is *not* the responsiblity of UserEmailer.
+# all we need is an object that responds to email
+
 
 ### Instance Double
 
