@@ -155,6 +155,8 @@
             <p> Outgoing Query Messages </p>
             <pre><code class="ruby" data-trim>
 class Application
+  attr_reader :candidate
+
   def initialize(candidate)
     @candidate = candidate
   end
@@ -166,7 +168,8 @@ end
 
 describe "#candidate_name" do
   it "returns candidates full name" do
-    application = create(:application)
+    candidate = Candidate.new("Serge Backflip")
+    application = Application.new(candidate)
 
     expect(application.candidate_name).
       to eq "Hiring Manager : Serge Backflip"
@@ -175,22 +178,24 @@ end
 
 describe "#candidate_name" do
   it "returns candidates full name" do
-    application = create(:application)
+    candidate = Candidate.new("Serge Backflip")
+    application = Application.new(candidate)
 
     expect(application.candidate_name).
       to eq "Hiring Manager : Serge Backflip"
     # REDUNDANT
-    expect(application.candidate_name.full_name).
+    expect(application.candidate.full_name).
       to eq "Serge Backflip"
   end
 end
 
 describe "#candidate_name" do
   it "returns candidates full name" do
-    application = create(:application)
+    candidate = Candidate.new("Serge Backflip")
+    application = Application.new(candidate)
 
     # STILL REDUNDANT
-    expect(application.canddiate_name).to receive(:full_name)
+    expect(candidate).to receive(:full_name)
 
     expect(application.candidate_name).
       to eq "Hiring Manager : Serge Backflip"
@@ -220,6 +225,10 @@ end
             <p> Outgoing Command Messages </p>
             <pre><code class="ruby" data-trim>
 class Department
+  def initialize(name)
+    @name = name
+  end
+
   def update_name(new_name)
     old_name = name
     self.name = new_name
@@ -231,7 +240,7 @@ end
             </code></pre>
             <pre><code class="ruby" data-trim>
 it "updates name and create a changelog entry" do
-  department = create(:department)
+  department = Department.new("Web Development")
 
   expect { department.update_name("Engineering") }.
     to change { department.name }.
@@ -252,19 +261,8 @@ end
           <section>
             <p> Outgoing Command Messages </p>
             <pre><code class="ruby" data-trim>
-class Department
-  def update_name(new_name)
-    old_name = name
-    self.name = new_name
-    self.save!
-
-    ChangeLog.create_entry(self, old_name, new_name)
-  end
-end
-            </code></pre>
-            <pre><code class="ruby" data-trim>
 it "updates name and create a changelog entry" do
-  department = create(:department)
+  department = Department.new("Web Development")
 
   # this message MUST get sent
   expect(ChangeLog).to receive(:create_entry).
@@ -277,9 +275,9 @@ it "updates name and create a changelog entry" do
 end
             </code></pre>
 
-            <p class="fragment" style="font-size: 50%; text-align:left; line-height:0.3em"> - Department IS responsible for sending create_entry to the receiver </p>
-            <p class="fragment" style="font-size: 50%; text-align:left; line-height:0.3em"> - The public api DEPENDS on the create_entry message being sent </p>
-            <p class="fragment" style="font-size: 50%; text-align:left; line-height:0.3em"> - Expect to send outgoing command messages </p>
+            <p class="fragment" style="font-size: 70%; text-align:left; line-height:0.6em"> - Department IS responsible for sending create_entry to the receiver </p>
+            <p class="fragment" style="font-size: 70%; text-align:left; line-height:0.6em"> - The public api DEPENDS on the create_entry message being sent </p>
+            <p class="fragment" style="font-size: 70%; text-align:left; line-height:0.6em"> - Expect to send outgoing command messages </p>
 
             <aside class="notes" data-markdown>
 * Department IS responsible for sending create_entry to the receiver
@@ -375,10 +373,10 @@ end
 ### Factory Girl
 
 it "sends email to user" do
-  user = create(:user, :email => "serge.backflip@example.com" )
+  user = FactoryGirl.create(:user, :email => "serge.backflip@example.com" )
   user_emailer = UserEmailer.new(user)
 
-  expect(user_emailer.email(user.email)).to deliver_to(
+  expect(user_emailer.email).to deliver_email_to(
     "serge.backflip@example.com"
   )
 end
@@ -391,7 +389,7 @@ it "sends email to user" do
     and_return("serge.backflip@example.com")
   user_emailer = UserEmailer.new(user)
 
-  expect(user_emailer.email(user.email)).to deliver_to(
+  expect(user_emailer.email).to deliver_email_to(
     "serge.backflip@example.com"
   )
 end
@@ -407,7 +405,7 @@ it "sends email to user" do
   allow(user).to receive(:email).and_return("serge.backflip@example.com")
   user_emailer = UserEmailer.new(user)
 
-  expect(user_emailer.email(user.email)).to deliver_to(
+  expect(user_emailer.email).to deliver_email_to(
     "serge.backflip@example.com"
   )
 end
