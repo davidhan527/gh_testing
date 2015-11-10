@@ -162,7 +162,7 @@ class Application
   end
 
   def candidate_name
-    "Hiring Manager : " + @candidate.full_name
+    "Candidate : " + @candidate.full_name
   end
 end
 
@@ -172,7 +172,7 @@ describe "#candidate_name" do
     application = Application.new(candidate)
 
     expect(application.candidate_name).
-      to eq "Hiring Manager : Serge Backflip"
+      to eq "Candidate : Serge Backflip"
   end
 end
 
@@ -182,7 +182,7 @@ describe "#candidate_name" do
     application = Application.new(candidate)
 
     expect(application.candidate_name).
-      to eq "Hiring Manager : Serge Backflip"
+      to eq "Candidate : Serge Backflip"
     # REDUNDANT
     expect(application.candidate.full_name).
       to eq "Serge Backflip"
@@ -198,7 +198,7 @@ describe "#candidate_name" do
     expect(candidate).to receive(:full_name)
 
     expect(application.candidate_name).
-      to eq "Hiring Manager : Serge Backflip"
+      to eq "Candidate : Serge Backflip"
   end
 end
             </code></pre>
@@ -339,7 +339,7 @@ end
 it "updates name and create a changelog entry" do
   department = create(:department)
   allow(ChangeLog).to receive(:create_entry).
-    with(department, "Web Developent", "Engineering")
+    and_return(true)
 end
 
 # spec_helper.rb
